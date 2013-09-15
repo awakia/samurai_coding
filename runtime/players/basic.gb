@@ -100,6 +100,30 @@ func neighbor(p, k)
   return ret
 endfunc
 
+func getNextMove(current, target)
+  if current[1] == target[1]
+    if current[0] < target[0]
+      return 2
+    else
+      return 5
+    endif
+  else
+    if current[1] < target[1]
+      if current[0] < target[0]
+        return 3
+      else
+        return 4
+      endif
+    else
+      if current[0] < target[0]
+        return 1
+      else
+        return 0
+      endif
+    endif
+  endif
+endfunc
+
 func atGate(pos)
   local k
   k = 0

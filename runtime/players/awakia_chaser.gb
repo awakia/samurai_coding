@@ -100,6 +100,30 @@ func neighbor(p, k)
   return ret
 endfunc
 
+func getNextMove(current, target)
+  if current[1] == target[1]
+    if current[0] < target[0]
+      return 2
+    else
+      return 5
+    endif
+  else
+    if current[1] < target[1]
+      if current[0] < target[0]
+        return 3
+      else
+        return 4
+      endif
+    else
+      if current[0] < target[0]
+        return 1
+      else
+        return 0
+      endif
+    endif
+  endif
+endfunc
+
 func atGate(pos)
   local k
   k = 0
@@ -137,7 +161,22 @@ func decideMove(agnt)
   return randomMove()
 endfunc
 
+func chaseMove(agnt)
+  if (gb_agent_status(team, agnt))
+    return -1
+  endif
+  current = pos[team][agnt]
+  target = pos[chase_team][agnt]
+  k = getNextMove(current, target)
+  dest = neighbor(current, k)
+  if (atGate(current) | outOfField(dest) == 0) & (occupied[dest[0]][dest[1]] == 0)
+    return k
+  endif
+  return -1
+endfunc
+
 team = gb_team_id()
+chase_team = (team + 1) % 4
 size = gb_field_size()
 width = size[0]
 height = size[1]
@@ -145,10 +184,10 @@ gates = gb_gate_positions()
 pos = gb_agent_positions()
 createOccupied()
 
-moves[0] = randomMove()
-moves[1] = decideMove(1)
-moves[2] = decideMove(2)
-moves[3] = decideMove(3)
+moves[0] = chaseMove(0)
+moves[1] = chaseMove(1)
+moves[2] = chaseMove(2)
+moves[3] = chaseMove(3)
 gb_move(moves)
 
 # print pos
