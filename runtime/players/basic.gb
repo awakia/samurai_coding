@@ -59,7 +59,7 @@ func abs(a)
   endif
 endfunc
 
-func mindist(p, q)
+func distance(p, q)
   local dx dy dz
   dx = p[0] - q[0]
   dy = p[1] - q[1]
@@ -161,6 +161,51 @@ func decideMove(agnt)
   return randomMove()
 endfunc
 
+func chaseMove(chase_team, agnt)
+  if (gb_agent_status(team, agnt))
+    return -1
+  endif
+  current = pos[team][agnt]
+  target = pos[chase_team][agnt]
+  k = getNextMove(current, target)
+  dest = neighbor(current, k)
+  if (atGate(current) | outOfField(dest) == 0)
+    return k
+  endif
+  return -1
+endfunc
+
+func nearestOpponentSamurai(current)
+  local res min_dist min_team min_agent
+  min_dist = 123456789
+  i = 0
+  while i < 4
+    if i != team
+      j = 0
+      while j < 4
+        dist = distance(current, pos[i][j])
+        if min_dist > dist
+          min_dist = dist
+          min_team = i
+          min_agent = j
+        endif
+        j = j + 1
+      endwhile
+    endif
+    i = i + 1
+  endwhile
+  res[0] = min_dist
+  res[1] = min_team
+  res[2] = min_agent
+  return res
+endfunc
+
+func dogChaseMove()
+  local near
+  near = nearestOpponentSamurai(pos[team][0])
+  return chaseMove(near[1], near[2])
+endfunc
+
 team = gb_team_id()
 size = gb_field_size()
 width = size[0]
@@ -168,13 +213,20 @@ height = size[1]
 gates = gb_gate_positions()
 pos = gb_agent_positions()
 storage = gb_storage()
+turn = storage[0]
 createOccupied()
 
-moves[0] = randomMove()
+moves[0] = dogChaseMove()
 moves[1] = decideMove(1)
 moves[2] = decideMove(2)
 moves[3] = decideMove(3)
 gb_move(moves)
+
+if turn == 20
+  print storage
+endif
+
+storage[0] = turn + 1
 
 # print pos
 # print occupied
