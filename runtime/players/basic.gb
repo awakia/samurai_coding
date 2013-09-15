@@ -134,3 +134,8 @@ moves[1] = decideMove(1)
 moves[2] = decideMove(2)
 moves[3] = decideMove(3)
 gb_move(moves)
+
+print 'hoge'
+print pos[0][1]
+hoge = mindist(pos[0][1], pos[0][2])
+print hoge
