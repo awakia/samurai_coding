@@ -167,6 +167,7 @@ width = size[0]
 height = size[1]
 gates = gb_gate_positions()
 pos = gb_agent_positions()
+storage = gb_storage()
 createOccupied()
 
 moves[0] = randomMove()
