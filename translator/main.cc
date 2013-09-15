@@ -59,8 +59,8 @@ int main(int argc, char *argv[]) {
       lines.push_back(line);
     } catch (SyntaxError err) {
       cerr << fileName << ":" << lno << ": error: "
-	   << err.message << endl
-	   << "| " << buf << endl;
+           << err.message << endl
+           << "| " << buf << endl;
       someErrors = true;
     }
   }

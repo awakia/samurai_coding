@@ -8,9 +8,9 @@
 
 static void
 genLines(vector<Line *>lines, int &lno,
-	     int terminatorSet,
-	     bool withinWhile, bool withinFuncDef, 
-	     ostream &out);
+             int terminatorSet,
+             bool withinWhile, bool withinFuncDef,
+             ostream &out);
 static void
 genExpr(Expression *e, ostream &out);
 
@@ -50,7 +50,7 @@ static void genBinary(Expression *e, string op, ostream &out) {
 }
 
 static void genFunctionCall(Expression *e, ostream &out) {
-  NameEntry *entry = lookup(e->strValue);  
+  NameEntry *entry = lookup(e->strValue);
   if (entry == 0 || entry->kind != func) {
     throw SyntaxError("Undefined function " + e->strValue);
   }
@@ -183,10 +183,10 @@ static void genAssignment(Line *l, ostream &out) {
 
 static void
 genBlock(vector<Line *> lines, int &lno,
-	     int terminatorSet,
-	     bool withinWhile,
-	     bool withinFuncDef,
-	     ostream &out) {
+             int terminatorSet,
+             bool withinWhile,
+             bool withinFuncDef,
+             ostream &out) {
   Line *l = lines[lno];
   if (l->kind == localDecl) {
     printLno(lines, lno, out);
@@ -198,25 +198,25 @@ genBlock(vector<Line *> lines, int &lno,
     out << ";";
     int revert = addLocals(l->varList);
     genLines(lines, lno, terminatorSet,
-		 withinWhile, withinFuncDef, out);
+                 withinWhile, withinFuncDef, out);
     popLocals(revert);
   } else {
     genLines(lines, lno, terminatorSet,
-		 withinWhile, withinFuncDef, out);
+                 withinWhile, withinFuncDef, out);
   }
 }
 
 static void
 genIf(Line *l, vector <Line*> lines, int &lno,
-	  bool withinWhile, bool withinFuncdef, ostream &out) {
+          bool withinWhile, bool withinFuncdef, ostream &out) {
   cost++;
   stringstream buf;
   genExpr(l->lhs, buf);
   emitCost(out);
   out << endl << "if (" << buf.rdbuf() << ".v) {";
   genBlock(lines, lno,
-	   (1 << elseLine) | (1 << elifLine) | (1 << endIfLine),
-	   withinWhile, withinFuncdef, out);
+           (1 << elseLine) | (1 << elifLine) | (1 << endIfLine),
+           withinWhile, withinFuncdef, out);
   emitCost(out);
   l = lines[lno];
   while (l->kind == elifLine) {
@@ -225,8 +225,8 @@ genIf(Line *l, vector <Line*> lines, int &lno,
     genExpr(l->lhs, buf);
     out << endl << "} else if (" << buf.rdbuf() << ".v) {";
     genBlock(lines, lno,
-	     (1 << elseLine) | (1 << elifLine) | (1 << endIfLine),
-	     withinWhile, withinFuncdef, out);
+             (1 << elseLine) | (1 << elifLine) | (1 << endIfLine),
+             withinWhile, withinFuncdef, out);
     emitCost(out);
     l = lines[lno];
   }
@@ -234,8 +234,8 @@ genIf(Line *l, vector <Line*> lines, int &lno,
     printLno(lines, lno, out);
     out  << endl << "} else {";
     genBlock(lines, lno,
-		 1 << endIfLine,
-		 withinWhile, withinFuncdef, out);
+                 1 << endIfLine,
+                 withinWhile, withinFuncdef, out);
     emitCost(out);
   }
   if (lines[lno]->kind != endIfLine) {
@@ -247,7 +247,7 @@ genIf(Line *l, vector <Line*> lines, int &lno,
 
 static void
 genWhile(Line *l, vector <Line*> lines, int &lno,
-	     bool withinFuncdef, ostream &out) {
+             bool withinFuncdef, ostream &out) {
   int costBeforeCondition;
   stringstream buf;
   genExpr(l->lhs, buf);
@@ -266,10 +266,10 @@ genWhile(Line *l, vector <Line*> lines, int &lno,
 
 static void
 genLines(vector<Line *>lines, int &lno,
-	     int terminatorSet,
-	     bool withinWhile,
-	     bool withinFuncdef,
-	     ostream &out) {
+             int terminatorSet,
+             bool withinWhile,
+             bool withinFuncdef,
+             ostream &out) {
   while (true) {
     Line* l = lines[lno];
     if (((1<<l->kind) & terminatorSet) != 0) {
@@ -279,65 +279,65 @@ genLines(vector<Line *>lines, int &lno,
     try {
       switch (l->kind) {
       case emptyLine:
-	break;
+        break;
       case assignment:
-	genAssignment(l, out);
-	break;
+        genAssignment(l, out);
+        break;
       case functionCall:
-	out << endl;
-	genFunctionCall(l->lhs, out);
-	out << ";";
-	break;
+        out << endl;
+        genFunctionCall(l->lhs, out);
+        out << ";";
+        break;
       case printStmnt: {
-	int costBefore = cost;
-	out << endl << "cerr";
-	for (Expression *e = l->lhs; e != 0; e = e->right) {
-	  out << " << ";
-	  genExpr(e->left, out);
-	}
-	out << "<< endl;";
-	cost = costBefore;
-	break;
+        int costBefore = cost;
+        out << endl << "cerr";
+        for (Expression *e = l->lhs; e != 0; e = e->right) {
+          out << " << ";
+          genExpr(e->left, out);
+        }
+        out << "<< endl;";
+        cost = costBefore;
+        break;
       }
       case ifLine:
-	genIf(l, lines, lno, withinWhile, withinFuncdef, out);
-	break;
+        genIf(l, lines, lno, withinWhile, withinFuncdef, out);
+        break;
       case whileLine:
-	genWhile(l, lines, lno, withinFuncdef, out);
-	break;
+        genWhile(l, lines, lno, withinFuncdef, out);
+        break;
       case breakStmnt:
-	if (!withinWhile) {
-	  throw SyntaxError("Break outside of while block");
-	}
-	cost++;
-	emitCost(out);
-	out << endl << "break;";
-	break;
+        if (!withinWhile) {
+          throw SyntaxError("Break outside of while block");
+        }
+        cost++;
+        emitCost(out);
+        out << endl << "break;";
+        break;
       case continueStmnt:
-	if (!withinWhile) {
-	  throw SyntaxError("Continue outside of while block");
-	}
-	cost++;
-	emitCost(out);
-	out << endl << "continue;";
-	break;
+        if (!withinWhile) {
+          throw SyntaxError("Continue outside of while block");
+        }
+        cost++;
+        emitCost(out);
+        out << endl << "continue;";
+        break;
       case returnStmnt: {
-	if (!withinFuncdef) {
-	  throw SyntaxError("Return outside of function definition");
-	}
-	stringstream buf;
-	genExpr(l->lhs, buf);
-	emitCost(out);
-	out << endl << "  return " << buf.rdbuf() << ";";
-	break;
+        if (!withinFuncdef) {
+          throw SyntaxError("Return outside of function definition");
+        }
+        stringstream buf;
+        genExpr(l->lhs, buf);
+        emitCost(out);
+        out << endl << "  return " << buf.rdbuf() << ";";
+        break;
       }
       default:
-	throw SyntaxError("Misplaced line");
+        throw SyntaxError("Misplaced line");
       }
     } catch (SyntaxError err) {
       cerr << fileName << ":" << lno << ": error: "
-	   << err.message << endl
-	   << "| " << l->source << endl;
+           << err.message << endl
+           << "| " << l->source << endl;
     }
   }
 }
@@ -381,13 +381,13 @@ genScript(vector<Line*> lines, int &lno, int team, ostream &out) {
     while (lines[lno]->kind == funcLine) {
       genFuncDef(lines, lno, out);
       while (lines[lno]->kind == emptyLine) {
-	lno++;
+        lno++;
       }
     }
   } catch (SyntaxError err) {
     cerr << fileName << ":" << lno << ": error: "
-	 << err.message << endl
-	 << "| " << lines[lno]->source << endl;
+         << err.message << endl
+         << "| " << lines[lno]->source << endl;
   }
   // Process main script
   out << endl << "void script() { int gbDepth = 0; gbCost = 0;";

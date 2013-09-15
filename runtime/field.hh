@@ -13,9 +13,9 @@ using namespace std;
 // Agents
 
 struct Agent {
-  struct Hexel* pos;		// Hexel currently on
-  int id;		    	// Agent ID: 0 means a dog
-  bool frozen;			// Whether or not in the forzen state
+  struct Hexel* pos;                // Hexel currently on
+  int id;                            // Agent ID: 0 means a dog
+  bool frozen;                        // Whether or not in the forzen state
   int team;
   void init(int team, int x, int y, int i, struct Field* field);
 };
@@ -34,8 +34,8 @@ bool operator==(const Syzygy &s1, const Syzygy &s2);
 struct Territory {
   int team;
   int size;
-  set <Hexel*> hexels;		// The whole terriotory
-  set <Hexel*> sieges;		// Newly obtained ones
+  set <Hexel*> hexels;                // The whole terriotory
+  set <Hexel*> sieges;                // Newly obtained ones
   bool guarded;
   bool north, south, east, west;
   bool transContinental;
@@ -65,12 +65,12 @@ inline bool operator==(const Rational &r1, const Rational &r2) {
 
 struct Field {
   int width, height;
-  struct Hexel** hexels;	// Hexel at (x, y) is hexels[y][x]
-  vector <Hexel*> gates;	// Gate positions
-  list <Hexel*> edges;		// Hexels on edges
-  list <Hexel*> allHexels;	// All hexels
-  struct Agent agents[4][4];	// Agents
-  list <Agent*> allAgents;	// All agents
+  struct Hexel** hexels;        // Hexel at (x, y) is hexels[y][x]
+  vector <Hexel*> gates;        // Gate positions
+  list <Hexel*> edges;                // Hexels on edges
+  list <Hexel*> allHexels;        // All hexels
+  struct Agent agents[4][4];        // Agents
+  list <Agent*> allAgents;        // All agents
   Field(int w, int h, vector<int>& vg, vector<int>& hg);
   void outputLayout(ostream& out);
   void outputAgentPositions(ostream& out);
@@ -85,17 +85,17 @@ ostream& operator<<(ostream& out, Field& f);
 // Hexels
 
 struct Hexel {
-  int x, y;			// Coordinates (only for debugging);
-  int id;			// Used for identifying a hexel
-  struct Agent* agent;		// agent on the hexel; 0 if none
-  int owner;			// territory owner team; 4 if none
+  int x, y;                        // Coordinates (only for debugging);
+  int id;                        // Used for identifying a hexel
+  struct Agent* agent;                // agent on the hexel; 0 if none
+  int owner;                        // territory owner team; 4 if none
   inline Hexel() {
     owner = 4;
     agent = 0;
   }
   void place(struct Agent* agt);
-  Hexel* adj[6];		// Six adjacent hexels/null at edges
-  Hexel* gates[6];		// Adjacent through the gate/null if not
+  Hexel* adj[6];                // Six adjacent hexels/null at edges
+  Hexel* gates[6];                // Adjacent through the gate/null if not
 };
 
 ostream & operator<<(ostream& out, Hexel& h);

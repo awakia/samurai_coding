@@ -21,7 +21,7 @@ ostream& operator<<(ostream& out, gb x) {
       map<int, gb>::iterator p = x.a->begin();
       out << p->first << ": " << p->second;
       for (p++; p != x.a->end(); p++) {
-	out << ", " << p->first << ": " << p->second;
+        out << ", " << p->first << ": " << p->second;
       }
     }
     out << "}";
@@ -33,8 +33,8 @@ extern gbScript *gbScript0;
 int main(int argc, char* argv[]) {
   if (argc != 6) {
     cerr << "Usage: " << argv[0]
-	 << " <# of rounds> <# of turns> <cost limit> <field width> <field height>"
-	 << endl;
+         << " <# of rounds> <# of turns> <cost limit> <field width> <field height>"
+         << endl;
     exit(1);
   }
   numRounds = atol(argv[1]);
@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
   costLimit = atol(argv[3]);
   if (numTeams%4 != 0) {
     cerr << "Number of teams = " << numTeams
-	 << "; should be a multiple of four" << endl;
+         << "; should be a multiple of four" << endl;
     exit(1);
   }
   int width = atol(argv[4]);

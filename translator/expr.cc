@@ -30,8 +30,8 @@ Expression::Expression(ExprKind k, string str, vector<Expression*> *al = 0) {
   if (al != 0) {
     cost = 2 * al->size();
     for (vector<Expression*>::iterator i = al->begin();
-	 i != al->end();
-	 i++) {
+         i != al->end();
+         i++) {
       cost += (*i)->cost;
     }
   }
@@ -46,10 +46,10 @@ Expression *parseFunCall(TokenItr &tp, string name) {
     while (true) {
       al->push_back(parseExpr(tp));
       if (tp->kind == rparToken) {
-	tp++;
-	break;
+        tp++;
+        break;
       } else if (tp->kind != commaToken) {
-	throw SyntaxError("Comma or close parenthesis expected");
+        throw SyntaxError("Comma or close parenthesis expected");
       }
       tp++;
     }
@@ -68,16 +68,16 @@ Expression *parsePrimary(TokenItr &tp) {
     } else {
       Expression *var = new Expression(variable, name);
       while (tp->kind == braToken) {
-	tp++;
-	Expression *key = parseExpr(tp);
-	if (tp->kind != cketToken) {
-	  throw SyntaxError("Close bracket expected");
-	}
-	tp++;
-	var = new Expression(aelem, var, key);
+        tp++;
+        Expression *key = parseExpr(tp);
+        if (tp->kind != cketToken) {
+          throw SyntaxError("Close bracket expected");
+        }
+        tp++;
+        var = new Expression(aelem, var, key);
       }
       return var;
-    } 
+    }
   }
   case lparToken: {
     tp++;

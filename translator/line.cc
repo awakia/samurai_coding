@@ -58,18 +58,18 @@ Line *parseLine(TokenItr tp) {
     vector <string> *vl = new vector<string>();
     if (tp->kind != rparToken) {
       while (true) {
-	if (tp->kind != idToken) {
-	  throw SyntaxError("Function argument name expected");
-	}
-	vl->push_back(tp->strValue);
-	tp++;
-	if (tp->kind == rparToken) {
-	  break;
-	}
-	if (tp->kind != commaToken) {
-	  throw SyntaxError("Comma or close parenthesis expected");
-	}
-	tp++;
+        if (tp->kind != idToken) {
+          throw SyntaxError("Function argument name expected");
+        }
+        vl->push_back(tp->strValue);
+        tp++;
+        if (tp->kind == rparToken) {
+          break;
+        }
+        if (tp->kind != commaToken) {
+          throw SyntaxError("Comma or close parenthesis expected");
+        }
+        tp++;
       }
     }
     tp++;
@@ -87,7 +87,7 @@ Line *parseLine(TokenItr tp) {
     tp++;
     while (tp->kind != eolToken) {
       if (tp->kind != idToken) {
-	throw SyntaxError("Invalid local variable name");
+        throw SyntaxError("Invalid local variable name");
       }
       vl->push_back(tp->strValue);
       tp++;
@@ -99,7 +99,7 @@ Line *parseLine(TokenItr tp) {
     Expression *e = parseExpr(tp);
     if (e->kind == variable || e->kind == aelem) {
       if (tp->kind != assignToken) {
-	throw SyntaxError("Assignment operator expected");
+        throw SyntaxError("Assignment operator expected");
       }
       tp++;
       Expression *r = parseExpr(tp);
@@ -145,5 +145,5 @@ Line *parseLine(TokenItr tp) {
   default:
     throw SyntaxError("Invalid line");
   }
- 
+
 }

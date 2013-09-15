@@ -41,23 +41,23 @@ Field::Field(int w, int h, vector<int>& vg, vector<int>& hg) {
     for (int x = 0; x != ww; x++) {
       Hexel& hx = hexels[y][x];
       if (evenRow) {
-	hx.adj[0] = ((y == 0) ?      0 : &hexels[y-1][x]);
-	hx.adj[1] = ((y == 0) ?      0 : &hexels[y-1][x+1]);
-	hx.adj[2] = ((x == ww-1) ?   0 : &hexels[y  ][x+1]);
-	hx.adj[3] = ((y == bottom) ? 0 : &hexels[y+1][x+1]);
-	hx.adj[4] = ((y == bottom) ? 0 : &hexels[y+1][x]);
-	hx.adj[5] = ((x == 0) ?      0 : &hexels[y  ][x-1]);
+        hx.adj[0] = ((y == 0) ?      0 : &hexels[y-1][x]);
+        hx.adj[1] = ((y == 0) ?      0 : &hexels[y-1][x+1]);
+        hx.adj[2] = ((x == ww-1) ?   0 : &hexels[y  ][x+1]);
+        hx.adj[3] = ((y == bottom) ? 0 : &hexels[y+1][x+1]);
+        hx.adj[4] = ((y == bottom) ? 0 : &hexels[y+1][x]);
+        hx.adj[5] = ((x == 0) ?      0 : &hexels[y  ][x-1]);
       } else {
-	hx.adj[0] = (x == 0 ?      0 : &hexels[y-1][x-1]);
-	hx.adj[1] = ((x == ww-1) ? 0 : &hexels[y-1][x]);
-	hx.adj[2] = ((x == ww-1) ? 0 : &hexels[y  ][x+1]);
-	hx.adj[3] = ((x == ww-1) ? 0 : &hexels[y+1][x]);
-	hx.adj[4] = (x == 0 ?      0 : &hexels[y+1][x-1]);
-	hx.adj[5] = (x == 0 ?      0 : &hexels[y  ][x-1]);
+        hx.adj[0] = (x == 0 ?      0 : &hexels[y-1][x-1]);
+        hx.adj[1] = ((x == ww-1) ? 0 : &hexels[y-1][x]);
+        hx.adj[2] = ((x == ww-1) ? 0 : &hexels[y  ][x+1]);
+        hx.adj[3] = ((x == ww-1) ? 0 : &hexels[y+1][x]);
+        hx.adj[4] = (x == 0 ?      0 : &hexels[y+1][x-1]);
+        hx.adj[5] = (x == 0 ?      0 : &hexels[y  ][x-1]);
       }
       // Clear gate adjacency
       hx.gates[0] = hx.gates[1] = hx.gates[2] =
-	hx.gates[3] = hx.gates[4] = hx.gates[5] = 0;
+        hx.gates[3] = hx.gates[4] = hx.gates[5] = 0;
     }
   }
 
@@ -147,29 +147,29 @@ ostream& operator<<(ostream& out, Field& f) {
       Hexel& hx = f.hexels[y][x];
       // westward or upward gate
       out << (x == 0 && hx.gates[5] != 0 ? '<' :
-	      (y == 0 && hx.gates[0] != 0 ? '^' :'.'));
+              (y == 0 && hx.gates[0] != 0 ? '^' :'.'));
       if (hx.owner < 0) {
-	out << ".";
+        out << ".";
       } else {
-	out << samuraiChar[hx.owner];
+        out << samuraiChar[hx.owner];
       }
       if (hx.agent == 0) {
-	out << "..";
+        out << "..";
       } else if (hx.agent->id == 0) {
-	out << dogChar[hx.agent->team] << ".";
+        out << dogChar[hx.agent->team] << ".";
       } else {
-	out << samuraiChar[hx.agent->team];
-	if (hx.agent->frozen) {
-	  out << "p";
-	} else {
-	  out << ".";
-	}
+        out << samuraiChar[hx.agent->team];
+        if (hx.agent->frozen) {
+          out << "p";
+        } else {
+          out << ".";
+        }
       }
       // eastward or downward gate
       out << (x == w-1 && hx.gates[2] != 0 ? '>' :
-	      (y == f.height-1 && hx.gates[3] != 0 ? 'V' :'.'));
+              (y == f.height-1 && hx.gates[3] != 0 ? 'V' :'.'));
       if (x != w-1) {
-	out << " ";
+        out << " ";
       }
     }
     out << endl;
@@ -190,12 +190,12 @@ bool connected(Hexel* h1, Hexel* h2, Hexel* h) {
     for (int j = 0; j != 6; j++) {
       Hexel* a = x->adj[j];
       if (a == h2) {
-	return true;
+        return true;
       }
       if (a != 0 && a != h && a->owner == team &&
-	  visited.count(a) == 0) {
-	visited.insert(a);
-	toVisit.push_back(a);
+          visited.count(a) == 0) {
+        visited.insert(a);
+        toVisit.push_back(a);
       }
     }
   } while (!toVisit.empty());
@@ -230,9 +230,9 @@ Territory::Territory(Hexel* h, set <Hexel*> &recorded, Field* f) {
     for (int d = 0; d != 6; d++) {
       Hexel* a = pos->adj[d];
       if (a != 0 && a->owner == team && hexels.count(a) == 0) {
-	toVisit.push(a);
-	addHexel(a, f);
-	recorded.insert(a);
+        toVisit.push(a);
+        addHexel(a, f);
+        recorded.insert(a);
       }
     }
   } while (!toVisit.empty());
@@ -242,22 +242,22 @@ Territory::Territory(Hexel* h, set <Hexel*> &recorded, Field* f) {
     // We will start from hexels on a field edge and flood out.
     set <Hexel*> outside;
     for (list <Hexel*>::iterator i = f->edges.begin();
-	 i != f->edges.end(); i++) {
+         i != f->edges.end(); i++) {
       Hexel* e = *i;
       if (hexels.count(e) == 0 && outside.count(e) == 0) {
-	outside.insert(e);
-	toVisit.push(e);
-	do {
-	  Hexel* v = toVisit.top();
-	  toVisit.pop();
-	  for (int d = 0; d != 6; d++) {
-	    Hexel* a = v->adj[d];
-	    if (a != 0 && hexels.count(a) == 0 && outside.count(a) == 0) {
-	      outside.insert(a);
-	      toVisit.push(a);
-	    }
-	  }
-	} while (!toVisit.empty());
+        outside.insert(e);
+        toVisit.push(e);
+        do {
+          Hexel* v = toVisit.top();
+          toVisit.pop();
+          for (int d = 0; d != 6; d++) {
+            Hexel* a = v->adj[d];
+            if (a != 0 && hexels.count(a) == 0 && outside.count(a) == 0) {
+              outside.insert(a);
+              toVisit.push(a);
+            }
+          }
+        } while (!toVisit.empty());
       }
     }
     // Any cells not in the "outside" sets belong to the territory,
@@ -266,13 +266,13 @@ Territory::Territory(Hexel* h, set <Hexel*> &recorded, Field* f) {
       bool evenRow = ((y & 1) == 0);
       int ww = (evenRow ? f->width - 1 : f->width);
       for (int x = 0; x != ww; x++) {
-	Hexel* hh = &f->hexels[y][x];
-	if (outside.count(hh) == 0) {
-	  size++;
-	  if (hh->owner != team && (hh->agent == 0 || hh->agent->id == 0)) {
-	    sieges.insert(hh);
-	  }
-	}
+        Hexel* hh = &f->hexels[y][x];
+        if (outside.count(hh) == 0) {
+          size++;
+          if (hh->owner != team && (hh->agent == 0 || hh->agent->id == 0)) {
+            sieges.insert(hh);
+          }
+        }
       }
     }
   }
@@ -297,8 +297,8 @@ void Field::territories(vector <Territory>& terrs) {
     for (int x = 0; x != ww; x++) {
       Hexel* h = &hexels[y][x];
       if (h->owner != 4 && recorded.count(h) == 0) {
-	// Start from a hexel owned by some team and not recorded yet
-	terrs.push_back(Territory(h, recorded, this));
+        // Start from a hexel owned by some team and not recorded yet
+        terrs.push_back(Territory(h, recorded, this));
       }
     }
   }
@@ -335,31 +335,31 @@ void Field::syzygies(list <Syzygy> &syzygies) {
       bool dogIncluded = (a->id == 0 || b->id == 0);
       list <Agent*>::iterator ic = ib;
       while (++ic != allAgents.end()) {
-	Agent* c = *ic;
-	Hexel* cpos = c->pos;
-	Rational slopeAC = slope(apos, cpos);
-	if (slopeAB == slopeAC) {
-	  candidates.push_back(cpos);
-	  dogIncluded |= (c->id == 0);
-	}
+        Agent* c = *ic;
+        Hexel* cpos = c->pos;
+        Rational slopeAC = slope(apos, cpos);
+        if (slopeAB == slopeAC) {
+          candidates.push_back(cpos);
+          dogIncluded |= (c->id == 0);
+        }
       }
       if (candidates.size() >= 2 && dogIncluded) {
-	// Four or more agents with at least one dog in a line
-	candidates.push_back(apos);
-	candidates.push_back(bpos);
-	sort(candidates.begin(), candidates.end());
-	Syzygy newSyzygy = Syzygy(candidates);
-	for (vector <Hexel*>::iterator ih = candidates.begin();
-	     ih != candidates.end(); ih++) {
-	  Hexel* h = *ih;
-	  if (already.count(h) != 0) {
-	    duplicated.insert(h);
-	    goto DUP_FOUND;
-	  } else {
-	    already.insert(h);
-	  }
-	}
-	temporary.push_back(newSyzygy);
+        // Four or more agents with at least one dog in a line
+        candidates.push_back(apos);
+        candidates.push_back(bpos);
+        sort(candidates.begin(), candidates.end());
+        Syzygy newSyzygy = Syzygy(candidates);
+        for (vector <Hexel*>::iterator ih = candidates.begin();
+             ih != candidates.end(); ih++) {
+          Hexel* h = *ih;
+          if (already.count(h) != 0) {
+            duplicated.insert(h);
+            goto DUP_FOUND;
+          } else {
+            already.insert(h);
+          }
+        }
+        temporary.push_back(newSyzygy);
       }
     DUP_FOUND:;
     }
@@ -368,9 +368,9 @@ void Field::syzygies(list <Syzygy> &syzygies) {
   for (list <Syzygy>::iterator s = temporary.begin();
        s != temporary.end(); s++) {
     for (vector <Hexel*>:: iterator h = s->swappedHexels.begin();
-	 h != s->swappedHexels.end(); h++) {
+         h != s->swappedHexels.end(); h++) {
       if (duplicated.count(*h) != 0)
-	goto DUPLICATED;
+        goto DUPLICATED;
     }
     syzygies.push_back(*s);
   DUPLICATED:;

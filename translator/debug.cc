@@ -52,7 +52,7 @@ ostream& operator<<(ostream& out, Token t) {
   if (t.kind == numberToken) {
     out << "(" << t.numValue << ")";
   } else if (t.kind == idToken ||
-	     t.kind == stringToken) {
+             t.kind == stringToken) {
     out << "('" << t.strValue << "')";
   }
 }
