@@ -1,0 +1,4 @@
+# Commonly unnecessary files to track.
+*~
+#*#
+.DS_Store
