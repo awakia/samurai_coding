@@ -11,6 +11,30 @@ func outOfField(p)
   return 0
 endfunc
 
+func createOccupied()
+  local adj_pos
+  i = 0
+  while i < 4
+    # エージェントがいる場所
+    j = 0
+    while j < 4
+      occupied[pos[i][j][0]][pos[i][j][1]] = 1
+      j = j + 1
+    endwhile
+
+    # 犬脅しの場所
+    if i != team
+      j = 0
+      while j < 6
+        adj_pos = neighbor(pos[i][0], j)
+        occupied[adj_pos[0]][adj_pos[1]] = 1
+        j = j + 1
+      endwhile
+    endif
+    i = i + 1
+  endwhile
+endfunc
+
 func randomMove()
   if gb_agent_status(team, agnt)
     return -1
@@ -139,8 +163,7 @@ moves[1] = decideMove(1)
 moves[2] = decideMove(2)
 moves[3] = decideMove(3)
 gb_move(moves)
+createOccupied()
 
-print 'hoge'
-print pos[0][1]
-hoge = mindist(pos[0][1], pos[0][2])
-print hoge
+# print pos
+# print occupied
