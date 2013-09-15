@@ -88,21 +88,25 @@ func isTaboo(agnt, dest)
   return 0
 endfunc
 
+func atGate(pos)
+  local k
+  k = 0
+  while k != $gates
+    if gates[k][0] == pos[0] & gates[k][1] == pos[1]
+      return 1
+    endif
+    k = k + 1
+  endwhile
+  return 0
+endfunc
+
 func decideMove(agnt)
   local current k cont dest gates atgate
   if (gb_agent_status(team, agnt))
     return -1
   endif
   current = pos[team][agnt]
-  gates = gb_gate_positions()
-  atgate = 0
-  k = 0
-  while k != $gates
-    if gates[k][0] == current[0] & gates[k][1] == current[1]
-      atgate = 1
-    endif
-    k = k + 1
-  endwhile
+  atgate = atGate(current)
   rand = gb_random_value(6)
   k = 0
   cont = 1
@@ -127,6 +131,7 @@ team = gb_team_id()
 size = gb_field_size()
 width = size[0]
 height = size[1]
+gates = gb_gate_positions()
 pos = gb_agent_positions()
 numTaboos = 0
 moves[0] = randomMove()
