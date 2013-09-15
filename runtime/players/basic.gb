@@ -19,6 +19,32 @@ func randomMove()
   endif
 endfunc
 
+func min(a, b)
+  if a < b
+    return a
+  else
+    return b
+  endif
+endfunc
+
+func abs(a)
+  if a < 0
+    return -1 * a
+  else
+    return a
+  endif
+endfunc
+
+func mindist(p, q)
+  local dx dy dz
+  dx = p[0] - q[0]
+  dy = p[1] - q[1]
+  dz = abs(dx+dy)
+  dx = abs(dx)
+  dy = abs(dy)
+  return min(dx+dy, min(dx+dz, dy+dz))
+endfunc
+
 func neighbor(p, k)
   local x y ret offset
   x = p[0]
@@ -71,7 +97,7 @@ func decideMove(agnt)
   gates = gb_gate_positions()
   atgate = 0
   k = 0
-  while k != $gates 
+  while k != $gates
     if gates[k][0] == current[0] & gates[k][1] == current[1]
       atgate = 1
     endif
