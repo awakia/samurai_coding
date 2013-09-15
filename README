@@ -1,0 +1,79 @@
+REAME file for SamurAI 2013 system
+
+Author: Takashi Chikayama @The University of Tokyo
+	chikayama@logos.t.u-tokyo.ac.jp
+===
+Takashi Chikayama disclaims to the extent authorized by law any and
+all warranties, whether express or implied, including, without
+limitation, any implied warranties of merchantability or fitness for a
+particular purpose.
+
+You assume responsibility for selecting the software to achieve your
+intended results, and for the results obtained from your use of the
+software. You shall bear the entire risk as to the quality and the
+performance of the software.
+===
+This directory contains a draft version of the system
+for IPSJ Programming Contest "SamurAI 2013".
+
+* Directory Structure
+./translator
+  Gunbai script to C++ translator
+./runtime
+  SamurAI 2013 game manager
+ ./runtime/players
+   Scripts of copetitors should be stored here
+./visualizer
+  Game visualizer
+ ./visualizer/src
+   Source files of the game visualizer
+./documents
+  Documents
+
+* Requirements
+- C++ compiler/libraries
+- Java runtime
+- make
+- Unix-like directory system and utilities such as cp
+- ... probably more that I'm not aware of.
+
+* Building the game system, including the translator,
+  the runtime system, as well as compeitors' scripts
+1. Prepare scripts the directory "./runtime/players".
+   An example should be found in "./runtime/players/greedy.gb".
+2. Make a list of competitor team names and their script file names.
+   and place it in the file "./runtime/players/teamlist".
+   An example should be found in ./runtime/players/teamlist.example
+3. Issue "make" at the top level should automatically build
+   the translator and the runtime system.
+   To test with an example, issueing "make example" at the top level
+   should copy the example team list to the "teamlist" file, and
+   then build the system
+
+* Running the game system
+After building the system, issue "./samuraiPlay <arguments>..."
+in the "./runtime" directory.
+
+Command line arguments (all required in this order) are:
+ <# of rounds>: Number of game rounds to play
+ <# of turns>: Number of turns in each game
+ <cost limit>: Cost limit set for competitor scripts
+ <field width>: Width of the field (must be an odd number)
+ <field height>: Height of the field (must be an odd number)
+Gates of the game field are automatically placed in a randomized manner.
+
+Executing samuraiPlay will output the game logs in the standard output.
+So, a typical command line would be as follows.
+  # ./samuraiPlay 1 100 10000 29 23 >test.samuraiLog
+The file name extension ".samuraiLog" is recommended,
+as the visualizer expects that extension for its input.
+You can find the format description for game log in the following file.
+    ./documents/logformat.txt
+
+* Running the game visualizer
+The JAR file of the visualizer should be found in "./visualizer/SamurAI_2013.jar".
+How to start it may depend on individual systems, but on certain systems,
+it is by simply double clicking the file or typing in "java -jar SamurAI_2013.jar"
+in some command prompt.
+===
+Last Update: 2013.08.27 Takashi Chikayama

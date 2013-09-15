@@ -1,0 +1,8 @@
+Spet. 12, 2013
+- Elements outside of 0 through 1023 in the storage are cleared
+  in the storage obtained with gb_storage after each turn.
+Sept. 11, 2013
+- Global variables of scripts cleared on the start of each turn.
+- Storage data cleared on the start of each round.
+- Fixed siege judgement bugs in the runtime.
+- Fixed a comment handling comment bug in the translator.
