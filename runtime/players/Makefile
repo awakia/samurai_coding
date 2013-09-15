@@ -18,7 +18,7 @@ teams.cc: Makefile.scripts
 .PHONY: clean depend
 depend: $(DEPENDS)
 clean:
-	rm -f *.o script?.cc teams.* makemake Makefile.scripts
+	rm -f *.o script*.cc teams.* makemake Makefile.scripts
 .cc.o:
 	g++ $(CXXFLAGS) -c $<
 %.d: %.cc
